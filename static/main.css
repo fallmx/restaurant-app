@@ -1,0 +1,31 @@
+body {
+  margin: auto;
+  max-width: 75em;
+  font-family: "Roboto", "Helvetica", sans-serif;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.links {
+  padding-left: 20px;
+  display: flex;
+  flex: auto;
+  align-items: center;
+}
+
+.link {
+  width: 5em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-area {
+  display: flex;
+  flex: initial;
+  align-items: center;
+}

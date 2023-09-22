@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/main.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>Restaurant app</h1>
+    <div class="links">
+      <a class="link" href="/">Home</a>
+    </div>
+    <div class="user-area">
+      {% if session["username"] %}
+        <p>Logged in as <b>{{ session["username"] }}</b></p>
+        <a class="link" href="/logout">Log out</a>
+      {% else %}
+        <a class="link" href="/login">Log in</a>
+        <a class="link" href="/signup">Sign up</a>
+      {% endif %}
+    </div>
+  </div>
+  <hr />
+  {% block content %}{% endblock %}
+  <hr />
+</body>
