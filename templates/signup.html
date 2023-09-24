@@ -2,9 +2,11 @@
 {% block title %}Sign up to restaurant app{% endblock %}
 {% block content %}
 <h2>Sign up</h2>
-<form action="/signup" method="POST">
-Username: <input type="text" name="username" /> <br/>
-Password: <input type="password" name="password" /> <br/>
+<form action="{{ url_for('signup_submit') }}" method="POST">
+<label for="username">Username:</label> <br/>
+<input type="text" id="username" name="username" /> <br/>
+<label for="password">Password:</label> <br/>
+<input type="password" id="password" name="password" /> <br/>
 <input type="submit" value="Sign up"/>
 </form>
 {% endblock %}

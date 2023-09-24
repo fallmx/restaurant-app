@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="/static/main.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
 </head>
 <body>
   <div class="header">
@@ -12,10 +12,10 @@
     <div class="user-area">
       {% if session["username"] %}
         <p>Logged in as <b>{{ session["username"] }}</b></p>
-        <a class="link" href="/logout">Log out</a>
+        <a class="link" href="{{ url_for('logout') }}">Log out</a>
       {% else %}
-        <a class="link" href="/login">Log in</a>
-        <a class="link" href="/signup">Sign up</a>
+        <a class="link" href="{{ url_for('login') }}">Log in</a>
+        <a class="link" href="{{ url_for('signup') }}">Sign up</a>
       {% endif %}
     </div>
   </div>

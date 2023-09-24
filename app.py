@@ -14,7 +14,7 @@ def index():
     return render_template("index.html")
 
 @app.route("/login")
-def login_page():
+def login():
     return render_template("login.html")
 
 @app.route("/login", methods = ['POST'])
