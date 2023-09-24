@@ -6,6 +6,11 @@ import secrets
 
 auth = Blueprint('auth', __name__)
 
+def login(username: str, admin: bool):
+    session["username"] = username
+    session["admin"] = admin
+    session["csrf_token"] = secrets.token_hex(16)
+
 @auth.route("/login")
 def login_page():
     return render_template("login.html")
@@ -22,9 +27,7 @@ def login_submit():
     else:
         password_hash = user.password_hash
         if check_password_hash(password_hash, password):
-            session["username"] = username
-            session["admin"] = user.admin
-            session["csrf_token"] = secrets.token_hex(16)
+            login(username, user.admin)
             return redirect("/")
         else:
             return "Invalid password"
@@ -49,5 +52,5 @@ def signup_submit():
         db.session.commit()
     except:
         return "Error creating user"
-    session["username"] = username
+    login(username, False)
     return redirect("/")
