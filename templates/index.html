@@ -1,5 +1,7 @@
 {% extends "wrapper.html" %}
 {% block title %}Restaurant app{% endblock %}
 {% block content %}
-<p>This is a restaurant app.</p>
+{% for restaurant in restaurants %}
+<a href="{{ url_for('restaurants.restaurant_page', restaurant_id=restaurant.id ) }}"><h3>{{ restaurant.name }}</h3></a>
+{% endfor %}
 {% endblock %}

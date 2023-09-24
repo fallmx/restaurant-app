@@ -2,20 +2,28 @@
 <head>
   <title>{% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
   <div class="header">
     <h1>Restaurant app</h1>
     <div class="links">
       <a class="link" href="/">Home</a>
+      {% if session["admin"] and session["admin"] == true %}
+      <a class="link" href="{{ url_for('restaurants.create_page') }}">Create restaurant</a>
+      {% endif %}
     </div>
     <div class="user-area">
       {% if session["username"] %}
-        <p>Logged in as <b>{{ session["username"] }}</b></p>
-        <a class="link" href="{{ url_for('logout') }}">Log out</a>
+        <p class="no-wrap">Logged in as <b>{{ session["username"] }}</b>
+        {% if session["admin"] and session["admin"] == true %}
+        <b>[<div class="red-text">ADMIN</div>]</b>
+        {% endif %}
+        </p>
+        <a class="link" href="{{ url_for('auth.logout') }}">Log out</a>
       {% else %}
-        <a class="link" href="{{ url_for('login') }}">Log in</a>
-        <a class="link" href="{{ url_for('signup') }}">Sign up</a>
+        <a class="link" href="{{ url_for('auth.login_page') }}">Log in</a>
+        <a class="link" href="{{ url_for('auth.signup_page') }}">Sign up</a>
       {% endif %}
     </div>
   </div>

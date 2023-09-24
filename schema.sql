@@ -4,3 +4,8 @@ CREATE TABLE users (
     password_hash TEXT,
     admin BOOLEAN
 );
+CREATE TABLE restaurants (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    description TEXT
+);

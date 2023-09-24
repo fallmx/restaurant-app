@@ -1,5 +1,7 @@
 body {
   margin: auto;
+  padding: 0 1em;
+  min-width: 320px;
   max-width: 75em;
   font-family: "Roboto", "Helvetica", sans-serif;
 }
@@ -10,13 +12,13 @@ body {
 }
 
 .links {
-  padding-left: 20px;
   display: flex;
   flex: auto;
   align-items: center;
 }
 
 .link {
+  padding: 0 1em;
   width: 5em;
   height: 2em;
   display: flex;
@@ -28,4 +30,12 @@ body {
   display: flex;
   flex: initial;
   align-items: center;
+}
+
+.red-text {
+  color: red;
+}
+
+.no-wrap {
+  white-space: nowrap;
 }

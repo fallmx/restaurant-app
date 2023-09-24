@@ -1,0 +1,13 @@
+{% extends "wrapper.html" %}
+{% block title %}Create restaurant{% endblock %}
+{% block content %}
+<h2>Create restaurant</h2>
+<form action="{{ url_for('restaurants.create') }}" method="POST">
+<label for="name">Name:</label> <br/>
+<input type="text" id="name" name="name" /> <br/>
+<label for="description">Description:</label> <br/>
+<input type="text" id="description" name="description" /> <br/>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+<input type="submit" value="Create"/>
+</form>
+{% endblock %}
