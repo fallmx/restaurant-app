@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS restaurants;
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE,
