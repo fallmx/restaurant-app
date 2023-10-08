@@ -2,5 +2,24 @@
 {% block title %}{{ restaurant.name }}{% endblock %}
 {% block content %}
 <h2>{{ restaurant.name }}</h2>
+<h3>Stars average: {{ average }}/5</h3>
 <p>{{ restaurant.description }}</p>
+{% if show_login_prompt == true %}
+<p><a href="{{ url_for('auth.login_page', next=request.path) }}">Log in</a> to leave a review.</p>
+{% endif %}
+{% if show_create_review == true %}
+<h3>Leave a review:</h3>
+<form action="{{ url_for('restaurants.create_review', restaurant_id=restaurant.id) }}" method="POST">
+<label for="stars">Stars:</label> <br/>
+<input type="number" id="stars" name="stars" min="1" max="5" /> <br/>
+<label for="review">Review:</label> <br/>
+<input type="text" id="review" name="review" /> <br/>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+<input type="submit" value="Create"/>
+</form>
+{% endif %}
+{% for review in reviews %}
+<h4>{{ review.username }} - {{ review.stars }}/5</h4>
+<p>{{ review.review }}</p>
+{% endfor %}
 {% endblock %}

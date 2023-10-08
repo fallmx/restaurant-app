@@ -14,7 +14,9 @@ A website to rate restaurants. The goal is that you can
 
 Right now you can
 
-- see added restaurants on a list,
+- see restaurants on a list,
+
+- review restaurants and see their ratings,
 
 - create a user and login,
 
@@ -39,7 +41,7 @@ Create a `.env` file in the root directory with the following content:
 DATABASE_URL=<Insert your PostgreSQL database url>
 SECRET_KEY=<Insert a strong secret key>
 ```
-Seed the database with some mock data (Warning: it will drop tables `users` and `restaurants` in the connected database). It will also create an admin user with the username `admin` and password `admin`:
+Seed the database with some mock data (Warning: it will drop some tables in the connected database, see `schema.sql`). It will also create an admin user with the username `admin` and password `admin`:
 ```bash
 python3 ./seed.py
 ```

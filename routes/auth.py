@@ -6,14 +6,16 @@ import secrets
 
 auth = Blueprint('auth', __name__)
 
-def login(username: str, admin: bool):
+def login(username: str, admin: bool, user_id: int):
     session["username"] = username
     session["admin"] = admin
+    session["user_id"] = user_id
     session["csrf_token"] = secrets.token_hex(16)
 
 @auth.route("/login")
 def login_page():
-    return render_template("login.html")
+    next = request.args.get("next", "/")
+    return render_template("login.html", next=next)
 
 @auth.route("/login", methods = ['POST'])
 def login_submit():
@@ -27,8 +29,8 @@ def login_submit():
     else:
         password_hash = user.password_hash
         if check_password_hash(password_hash, password):
-            login(username, user.admin)
-            return redirect("/")
+            login(username, user.admin, user.id)
+            return redirect(request.form["next"])
         else:
             return "Invalid password"
 
@@ -47,10 +49,11 @@ def signup_submit():
     password = request.form["password"]
     password_hash = generate_password_hash(password)
     try:
-        sql = "INSERT INTO users (username, password_hash, admin) VALUES (:username, :password_hash, false)"
-        db.session.execute(text(sql), {"username":username, "password_hash":password_hash})
+        sql = "INSERT INTO users (username, password_hash, admin) VALUES (:username, :password_hash, false) RETURNING id"
+        result = db.session.execute(text(sql), {"username":username, "password_hash":password_hash})
         db.session.commit()
+        user = result.fetchone()
+        login(username, False, user.id)
+        return redirect("/")
     except:
         return "Error creating user"
-    login(username, False)
-    return redirect("/")
