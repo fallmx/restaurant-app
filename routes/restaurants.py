@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, session, abort, url_for
 from sqlalchemy.sql import text
 from app import db
+from geopy.geocoders import Nominatim
+
+geocoder = Nominatim(user_agent="restaurant-app")
 
 restaurants = Blueprint('restaurants', __name__)
 
@@ -10,11 +13,25 @@ def create():
         abort(403)
     if not session["admin"] or session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
+
     name = request.form["name"]
     description = request.form["description"]
+    street_address = request.form["street_address"]
+    postal_code = request.form["postal_code"]
+    city = request.form["city"]
+
     try:
-        sql = "INSERT INTO restaurants (name, description) VALUES (:name, :description)"
-        db.session.execute(text(sql), {"name":name, "description":description})
+        location = geocoder.geocode({"street": street_address, "postalcode": postal_code, "city": city})
+        if not location:
+            raise
+        latitude = location.latitude
+        longitude = location.longitude
+    except:
+        return "Error getting address coordinates"
+    
+    try:
+        sql = "INSERT INTO restaurants (name, description, street_address, postal_code, city, latitude, longitude) VALUES (:name, :description, :street_address, :postal_code, :city, :latitude, :longitude)"
+        db.session.execute(text(sql), {"name":name, "description":description, "street_address": street_address, "postal_code": postal_code, "city": city, "latitude": latitude, "longitude": longitude})
         db.session.commit()
         return redirect("/")
     except:

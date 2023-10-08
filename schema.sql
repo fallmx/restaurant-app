@@ -12,7 +12,12 @@ CREATE TABLE users (
 CREATE TABLE restaurants (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    description TEXT
+    description TEXT,
+    street_address TEXT,
+    postal_code TEXT,
+    city TEXT,
+    latitude NUMERIC,
+    longitude NUMERIC
 );
 CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,

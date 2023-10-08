@@ -14,7 +14,7 @@ A website to rate restaurants. The goal is that you can
 
 Right now you can
 
-- see restaurants on a list,
+- see restaurants on a map,
 
 - review restaurants and see their ratings,
 

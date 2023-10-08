@@ -39,3 +39,27 @@ body {
 .no-wrap {
   white-space: nowrap;
 }
+
+.restaurant-list {
+  width: 20em; 
+}
+
+#map {
+  min-height: 600px;
+  min-width: 350px;
+  flex-grow: 5;
+}
+
+.index-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.icon {
+  display: flex;
+  flex-direction: row;
+  background: none;
+  font-size: 2em;
+  white-space: nowrap;
+}
