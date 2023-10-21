@@ -1,1 +1,2 @@
 from services.UsersService import UsersService
+from services.RestaurantsService import RestaurantsService

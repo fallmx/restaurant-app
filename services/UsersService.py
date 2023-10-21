@@ -1,4 +1,4 @@
-from services.helpers import execute
+from services.helpers import execute, commit
 
 class UsersService:
     def get_user(username: str):
@@ -8,5 +8,6 @@ class UsersService:
         
     def create_user(username: str, password_hash: str, admin: bool):
         sql = "INSERT INTO users (username, password_hash, admin) VALUES (:username, :password_hash, false) RETURNING id"
-        result = execute(sql, {"username": username, "password_hash": password_hash, "admin": admin}, commit=True)
+        result = execute(sql, {"username": username, "password_hash": password_hash, "admin": admin})
+        commit()
         return result.fetchone()
