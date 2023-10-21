@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
-from sqlalchemy.sql import text
-from app import db
+from services import UsersService
 import secrets
 
 auth = Blueprint('auth', __name__)
@@ -21,9 +20,7 @@ def login_page():
 def login_submit():
     username = request.form["username"]
     password = request.form["password"]
-    sql = "SELECT id, password_hash, admin FROM users WHERE username=:username"
-    result = db.session.execute(text(sql), {"username":username})
-    user = result.fetchone()
+    user = UsersService.get_user(username)
     if not user:
         return "Invalid username"
     else:
@@ -49,10 +46,7 @@ def signup_submit():
     password = request.form["password"]
     password_hash = generate_password_hash(password)
     try:
-        sql = "INSERT INTO users (username, password_hash, admin) VALUES (:username, :password_hash, false) RETURNING id"
-        result = db.session.execute(text(sql), {"username":username, "password_hash":password_hash})
-        db.session.commit()
-        user = result.fetchone()
+        user = UsersService.create_user(username, password_hash, False)
         login(username, False, user.id)
         return redirect("/")
     except:
