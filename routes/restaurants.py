@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, session, abort, url_for
 from wtforms import Form, StringField, IntegerField, validators
 from services import RestaurantsService
+from routes.helpers import listErrors
 from sqlalchemy.exc import IntegrityError
 from geopy.geocoders import Nominatim
 
@@ -28,7 +29,7 @@ def create():
 
     form = RestaurantForm(request.form)
     if not form.validate():
-        abort(400)
+        return render_template("create_restaurant.html", error=listErrors(form.errors))
 
     name = form.name.data
     description = form.description.data
@@ -49,7 +50,7 @@ def create():
         restaurant = RestaurantsService.create_restaurant(name, description, street_address, postal_code, city, latitude, longitude)
         return redirect(url_for("restaurants.restaurant_page", restaurant_id=restaurant.id))
     except:
-        return render_template("signup.html", error="Error creating restaurant")
+        return render_template("create_restaurant.html", error="Error creating restaurant")
 
 @restaurants.route("/create")
 def create_page():

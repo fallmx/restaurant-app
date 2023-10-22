@@ -82,3 +82,8 @@ body {
     width: 90%;
     height: 3em;
 }
+
+.error {
+  color: red;
+  white-space: pre-line;
+}

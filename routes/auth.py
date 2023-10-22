@@ -3,6 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from wtforms import Form, StringField, validators
 from sqlalchemy.exc import IntegrityError
 from services import UsersService
+from routes.helpers import listErrors
 import secrets
 
 auth = Blueprint('auth', __name__)
@@ -26,7 +27,7 @@ def login_page():
 def login_submit():
     form = AuthForm(request.form)
     if not form.validate():
-        abort(400)
+        return render_template("login.html", error=listErrors(form.errors))
     username = form.username.data
     password = form.password.data
     user = UsersService.get_user(username)
@@ -53,7 +54,7 @@ def signup_page():
 def signup_submit():
     form = AuthForm(request.form)
     if not form.validate():
-        abort(400)
+        return render_template("signup.html", error=listErrors(form.errors))
     username = form.username.data
     password = form.password.data
     password_hash = generate_password_hash(password)
