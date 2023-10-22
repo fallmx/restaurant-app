@@ -27,19 +27,19 @@ def login_page():
 def login_submit():
     form = AuthForm(request.form)
     if not form.validate():
-        return render_template("login.html", error=listErrors(form.errors))
+        return render_template("login.html", next=request.form["next"], error=listErrors(form.errors))
     username = form.username.data
     password = form.password.data
     user = UsersService.get_user(username)
     if not user:
-        return render_template("login.html", error="Invalid username")
+        return render_template("login.html", next=request.form["next"], error="Invalid username")
     else:
         password_hash = user.password_hash
         if check_password_hash(password_hash, password):
             login(username, user.admin, user.id)
             return redirect(request.form["next"])
         else:
-            return render_template("login.html", error="Invalid password")
+            return render_template("login.html", next=request.form["next"], error="Invalid password")
 
 @auth.route("/logout")
 def logout():
