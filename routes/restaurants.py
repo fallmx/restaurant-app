@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, session, abort, url_for
-from services import RestaurantsService, UsersService
+from services import RestaurantsService
+from sqlalchemy.exc import IntegrityError
 from geopy.geocoders import Nominatim
 
 geocoder = Nominatim(user_agent="restaurant-app")
@@ -51,11 +52,16 @@ def restaurant_page(restaurant_id):
     if average_row:
         average = round(average_row.average, 1)
 
-    reviews = RestaurantsService.get_reviews(restaurant_id)
+    logged_user_id = -1
+    logged_in = "user_id" in session
+    if logged_in:
+        logged_user_id = session["user_id"]
+
+    reviews = RestaurantsService.get_reviews(restaurant_id, logged_user_id)
 
     show_create_review = False
     show_login_prompt = True
-    if "user_id" in session:
+    if logged_in:
         already_reviewed = any(r.user_id == session["user_id"] for r in reviews)
         show_create_review = not already_reviewed
         show_login_prompt = False
@@ -78,17 +84,46 @@ def create_review(restaurant_id):
 
     if not restaurant:
         abort(404)
-    
-    user = UsersService.get_user(session["username"])
-
-    if not user:
-        abort(403)
 
     stars = request.form["stars"]
     review = request.form["review"]
 
     try:
-        RestaurantsService.create_review(restaurant_id, user.id, stars, review)
+        RestaurantsService.create_review(restaurant_id, session["user_id"], stars, review)
         return redirect(url_for("restaurants.restaurant_page", restaurant_id=restaurant_id))
     except:
         return "Error creating review"
+
+@restaurants.route("/<int:restaurant_id>/reviews/<int:review_id>/like", methods=["POST"])
+def like_review(restaurant_id, review_id):
+    if not "username" in session:
+        return redirect(url_for("auth.login_page", next=url_for("restaurants.restaurant_page", restaurant_id=restaurant_id)))
+    
+    review = RestaurantsService.get_review(review_id)
+
+    if not review:
+        abort(404)
+
+    try:
+        RestaurantsService.like_review(session["user_id"], review_id)
+        return redirect(request.referrer)
+    except IntegrityError:
+        return redirect(request.referrer)
+    except:
+        return "Error liking review"
+
+@restaurants.route("/<int:restaurant_id>/reviews/<int:review_id>/unlike", methods=["POST"])
+def unlike_review(restaurant_id, review_id):
+    if not "username" in session:
+        abort(403)
+    
+    review = RestaurantsService.get_review(review_id)
+
+    if not review:
+        abort(404)
+
+    try:
+        RestaurantsService.unlike_review(session["user_id"], review_id)
+        return redirect(request.referrer)
+    except:
+        return "Error unliking review"
