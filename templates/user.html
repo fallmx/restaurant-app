@@ -8,11 +8,11 @@
 <p>{{ review.review }}</p>
 {% if review.has_liked %}
 <form action="{{ url_for('restaurants.unlike_review', restaurant_id=review.restaurant_id, review_id=review.id) }}" method="POST">
-    Likes: {{ review.likes }}<input type="submit" value="Unlike" />
+  Likes: {{ review.likes }}<input type="submit" value="Unlike" />
 </form>
 {% else %}
 <form action="{{ url_for('restaurants.like_review', restaurant_id=review.restaurant_id, review_id=review.id) }}" method="POST">
-    Likes: {{ review.likes }}<input type="submit" value="Like" />
+  Likes: {{ review.likes }}<input type="submit" value="Like" />
 </form>
 {% endif %}
 {% endfor %}
