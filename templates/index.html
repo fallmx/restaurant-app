@@ -17,6 +17,7 @@
       <input id="searchButton" type="submit" value="Search"/>
     </form>
     {% for restaurant in restaurants %}
+    <hr/>
     <a href="{{ url_for('restaurants.restaurant_page', restaurant_id=restaurant.id ) }}"><h3>{{ restaurant.name }}</h3></a>
     <b>{{ restaurant.average|round(1) }}/5</b>
     {% endfor %}

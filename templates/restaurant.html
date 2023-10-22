@@ -21,6 +21,7 @@
 </form>
 {% endif %}
 {% for review in reviews %}
+<hr/>
 <h4><a href="{{ url_for('users.user_page', username=review.username) }}">{{ review.username }}</a> - {{ review.stars }}/5</h4>
 <p>{{ review.review }}</p>
 {% if review.has_liked %}
