@@ -19,7 +19,7 @@
 </form>
 {% endif %}
 {% for review in reviews %}
-<h4>{{ review.username }} - {{ review.stars }}/5</h4>
+<h4><a href="{{ url_for('users.user_page', username=review.username) }}">{{ review.username }}</a> - {{ review.stars }}/5</h4>
 <p>{{ review.review }}</p>
 {% endfor %}
 {% endblock %}

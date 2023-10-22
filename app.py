@@ -14,3 +14,4 @@ import routes
 app.register_blueprint(routes.index, url_prefix="/")
 app.register_blueprint(routes.auth, url_prefix="/auth")
 app.register_blueprint(routes.restaurants, url_prefix="/restaurants")
+app.register_blueprint(routes.users, url_prefix="/users")

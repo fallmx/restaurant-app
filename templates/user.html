@@ -1,0 +1,10 @@
+{% extends "wrapper.html" %}
+{% block title %}{{ user.username }}{% endblock %}
+{% block content %}
+<h2>{{ user.username }}</h2>
+<h3>Reviews by user:</h3>
+{% for review in reviews %}
+<h4><a href="{{ url_for('restaurants.restaurant_page', restaurant_id=review.restaurant_id) }}">{{ review.restaurant_name }}</a> - {{ review.stars }}/5</h4>
+<p>{{ review.review }}</p>
+{% endfor %}
+{% endblock %}
