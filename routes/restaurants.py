@@ -43,13 +43,13 @@ def create():
         latitude = location.latitude
         longitude = location.longitude
     except:
-        return "Error getting address coordinates"
+        return render_template("create_restaurant.html", error="Error getting address coordinates")
     
     try:
         restaurant = RestaurantsService.create_restaurant(name, description, street_address, postal_code, city, latitude, longitude)
         return redirect(url_for("restaurants.restaurant_page", restaurant_id=restaurant.id))
     except:
-        return "Error creating restaurant"
+        return render_template("signup.html", error="Error creating restaurant")
 
 @restaurants.route("/create")
 def create_page():

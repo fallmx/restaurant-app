@@ -41,7 +41,9 @@ body {
 }
 
 .restaurant-list {
-  width: 20em; 
+  width: 20em;
+  max-height: 100vh;
+  overflow: auto;
 }
 
 #map {
@@ -54,6 +56,7 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  max-height: 100%;
 }
 
 .icon {

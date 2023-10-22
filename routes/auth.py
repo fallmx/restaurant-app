@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, abort
 from werkzeug.security import check_password_hash, generate_password_hash
 from wtforms import Form, StringField, validators
+from sqlalchemy.exc import IntegrityError
 from services import UsersService
 import secrets
 
@@ -30,14 +31,14 @@ def login_submit():
     password = form.password.data
     user = UsersService.get_user(username)
     if not user:
-        return "Invalid username"
+        return render_template("login.html", error="Invalid username")
     else:
         password_hash = user.password_hash
         if check_password_hash(password_hash, password):
             login(username, user.admin, user.id)
             return redirect(request.form["next"])
         else:
-            return "Invalid password"
+            return render_template("login.html", error="Invalid password")
 
 @auth.route("/logout")
 def logout():
@@ -60,5 +61,7 @@ def signup_submit():
         user = UsersService.create_user(username, password_hash, False)
         login(username, False, user.id)
         return redirect("/")
+    except IntegrityError:
+        return render_template("signup.html", error="Username already exists")
     except:
-        return "Error creating user"
+        return render_template("signup.html", error="Error creating user")

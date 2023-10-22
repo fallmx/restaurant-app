@@ -18,7 +18,7 @@ class RestaurantsService:
     
     def get_restaurant(restaurant_id: int):
         sql = """
-        SELECT id, name, description, coalesce(average, 0) AS average
+        SELECT id, name, description, street_address, postal_code, city, coalesce(average, 0) AS average
         FROM restaurants AS res
         LEFT JOIN review_averages AS avg ON res.id=avg.restaurant_id
         WHERE id=:restaurant_id

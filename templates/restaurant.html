@@ -3,7 +3,9 @@
 {% block content %}
 <h2>{{ restaurant.name }}</h2>
 <h3>Stars average: {{ restaurant.average|round(1) }}/5</h3>
+<i>{{ restaurant.street_address }}, {{ restaurant.postal_code }} {{ restaurant.city }}</i>
 <p>{{ restaurant.description }}</p>
+<h3>Reviews:</h3>
 {% if show_login_prompt == true %}
 <p><a href="{{ url_for('auth.login_page', next=request.path) }}">Log in</a> to leave a review.</p>
 {% endif %}

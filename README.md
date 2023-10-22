@@ -1,24 +1,16 @@
 # restaurant-app
 
-A website to rate restaurants. The goal is that you can
+A website to rate restaurants. You can
 
 - see restaurants on a map,
 
-- filter/order restaurants by text, categories, ratings etc.,
-
-- see and like their ratings and make a new rating,
-
-- follow other users who make ratings and see their ratings on a feed.
-
-  
-
-Right now you can
-
-- see restaurants on a map,
+- rate restaurants,
 
 - filter/order restaurants by text and ratings,
 
-- see and like their ratings and make a new rating,
+- view ratings made by a user,
+
+- like ratings,
 
 - add new restaurants as an admin.
 
