@@ -1,9 +1,14 @@
-from flask import Blueprint, render_template, request, session, redirect
+from flask import Blueprint, render_template, request, session, redirect, abort
 from werkzeug.security import check_password_hash, generate_password_hash
+from wtforms import Form, StringField, validators
 from services import UsersService
 import secrets
 
 auth = Blueprint('auth', __name__)
+
+class AuthForm(Form):
+    username = StringField('Username', [validators.Length(min=5, max=25)])
+    password = StringField('Password', [validators.Length(min=5, max=64)])
 
 def login(username: str, admin: bool, user_id: int):
     session["username"] = username
@@ -18,8 +23,11 @@ def login_page():
 
 @auth.route("/login", methods = ['POST'])
 def login_submit():
-    username = request.form["username"]
-    password = request.form["password"]
+    form = AuthForm(request.form)
+    if not form.validate():
+        abort(400)
+    username = form.username.data
+    password = form.password.data
     user = UsersService.get_user(username)
     if not user:
         return "Invalid username"
@@ -42,8 +50,11 @@ def signup_page():
 
 @auth.route("/signup", methods = ['POST'])
 def signup_submit():
-    username = request.form["username"]
-    password = request.form["password"]
+    form = AuthForm(request.form)
+    if not form.validate():
+        abort(400)
+    username = form.username.data
+    password = form.password.data
     password_hash = generate_password_hash(password)
     try:
         user = UsersService.create_user(username, password_hash, False)

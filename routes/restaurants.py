@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, session, abort, url_for
+from wtforms import Form, StringField, IntegerField, validators
 from services import RestaurantsService
 from sqlalchemy.exc import IntegrityError
 from geopy.geocoders import Nominatim
@@ -7,6 +8,17 @@ geocoder = Nominatim(user_agent="restaurant-app")
 
 restaurants = Blueprint('restaurants', __name__)
 
+class RestaurantForm(Form):
+    name = StringField('Name', [validators.Length(min=1, max=35)])
+    description = StringField('Description', [validators.Length(max=500)])
+    street_address = StringField('Street address', [validators.Length(max=100)])
+    postal_code = StringField('Postal code', [validators.Length(max=15)])
+    city = StringField('City', [validators.Length(max=100)])
+
+class ReviewForm(Form):
+    stars = IntegerField('Stars', [validators.NumberRange(min=1, max=5)])
+    review = StringField('Review', [validators.Length(max=1000)])
+
 @restaurants.route("/", methods=["POST"])
 def create():
     if not "admin" in session or not "csrf_token" in session:
@@ -14,11 +26,15 @@ def create():
     if not session["admin"] or session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
 
-    name = request.form["name"]
-    description = request.form["description"]
-    street_address = request.form["street_address"]
-    postal_code = request.form["postal_code"]
-    city = request.form["city"]
+    form = RestaurantForm(request.form)
+    if not form.validate():
+        abort(400)
+
+    name = form.name.data
+    description = form.description.data
+    street_address = form.street_address.data
+    postal_code = form.postal_code.data
+    city = form.city.data
 
     try:
         location = geocoder.geocode({"street": street_address, "postalcode": postal_code, "city": city})
@@ -78,8 +94,13 @@ def create_review(restaurant_id):
     if not restaurant:
         abort(404)
 
-    stars = request.form["stars"]
-    review = request.form["review"]
+    form = ReviewForm(request.form)
+
+    if not form.validate():
+        abort(400)
+    
+    stars = form.stars.data
+    review = form.review.data
 
     try:
         RestaurantsService.create_review(restaurant_id, session["user_id"], stars, review)
