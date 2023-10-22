@@ -16,9 +16,9 @@ Right now you can
 
 - see restaurants on a map,
 
-- review restaurants and see their ratings,
+- filter/order restaurants by text and ratings,
 
-- create a user and login,
+- see and like their ratings and make a new rating,
 
 - add new restaurants as an admin.
 

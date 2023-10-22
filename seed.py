@@ -22,5 +22,8 @@ with engine.begin() as conn:
     create_restaurant("Ramen-shop", "Japanese ramen.", "Helsinginkatu 20", "00530", "Helsinki", "60.18677926782581", "24.951847626706268")
     create_restaurant("Taco-foodtruck", "A foodtruck serving tacos.", "Hietalahdentori", "00180", "Helsinki", "60.16277062521797", "24.93009142165094")
 
+    conn.execute(text("REFRESH MATERIALIZED VIEW review_averages"))
+    conn.execute(text("REFRESH MATERIALIZED VIEW review_likes"))
+
     conn.commit()
     conn.close()

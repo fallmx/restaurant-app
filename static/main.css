@@ -63,3 +63,19 @@ body {
   font-size: 2em;
   white-space: nowrap;
 }
+
+#searchBar {
+    width: 90%;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+#sort {
+    padding: 0.5em;
+}
+
+#searchButton {
+    margin-top: 1em;
+    width: 90%;
+    height: 3em;
+}

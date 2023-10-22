@@ -46,12 +46,6 @@ def restaurant_page(restaurant_id):
     if not restaurant:
         abort(404)
 
-    average_row = RestaurantsService.get_rating(restaurant_id)
-
-    average = 0
-    if average_row:
-        average = round(average_row.average, 1)
-
     logged_user_id = -1
     logged_in = "user_id" in session
     if logged_in:
@@ -68,7 +62,6 @@ def restaurant_page(restaurant_id):
 
     return render_template("restaurant.html",
                            restaurant=restaurant,
-                           average=average,
                            reviews=reviews,
                            show_create_review=show_create_review,
                            show_login_prompt=show_login_prompt)

@@ -1,19 +1,28 @@
 from services.helpers import execute, commit
 
 class RestaurantsService:
-    def get_restaurants():
-        sql = "SELECT id, name, latitude, longitude FROM restaurants"
-        result = execute(sql)
+    def get_restaurants(search: str, sort: str = None):
+        sql = """
+        SELECT id, name, latitude, longitude, coalesce(average, 0) AS average
+        FROM restaurants AS res
+        LEFT JOIN review_averages AS avg ON res.id=avg.restaurant_id
+        WHERE position(lower(:search) in lower(name))>0
+        """
+        if sort == "rating_desc":
+            sql += " ORDER BY average DESC"
+        if sort == "rating_asc":
+            sql += " ORDER BY average ASC"
+        result = execute(sql, {"search": search})
         restaurants = result.fetchall()
         return [row._asdict() for row in restaurants]
     
     def get_restaurant(restaurant_id: int):
-        sql = "SELECT id, name, description FROM restaurants WHERE id=:restaurant_id"
-        result = execute(sql, {"restaurant_id":restaurant_id})
-        return result.fetchone()
-    
-    def get_rating(restaurant_id: int):
-        sql = "SELECT average FROM review_averages WHERE restaurant_id=:restaurant_id"
+        sql = """
+        SELECT id, name, description, coalesce(average, 0) AS average
+        FROM restaurants AS res
+        LEFT JOIN review_averages AS avg ON res.id=avg.restaurant_id
+        WHERE id=:restaurant_id
+        """
         result = execute(sql, {"restaurant_id":restaurant_id})
         return result.fetchone()
     
